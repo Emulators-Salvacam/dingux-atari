@@ -141,12 +141,8 @@ danzeff_readInput(gp2xCtrlData* pspctrl)
       
       //Now grab the value out of the array
       pressed = modeChar[ (mode*2 + shifted) % MAX_VKEYBOARD][y][x][innerChoice];
-    }    
-    #ifdef MIYOO_MODE
-    else if (pspctrl->Buttons& GP2X_CTRL_SELECT) //toggle mode
-    #else
+    }
     else if (pspctrl->Buttons& GP2X_CTRL_LTRIGGER) //toggle mode
-    #endif
     {
       dirty = true;
       #ifdef MIYOO_MODE 
