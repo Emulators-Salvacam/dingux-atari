@@ -307,7 +307,11 @@
     -1                     , /*  KBD_SELECT     */
     -1                     , /*  KBD_START      */
     KBD_LTRIGGER_MAPPING   , /*  KBD_LTRIGGER   */
+#ifdef MIYOO_MODE
+    ATARIK_CONSOLE_OPTION  , /*  KBD_RTRIGGER   */
+#else    
     KBD_RTRIGGER_MAPPING   , /*  KBD_RTRIGGER   */
+#endif
     ATARIK_UP              , /*  KBD_JOY_UP     */
     ATARIK_RIGHT           , /*  KBD_JOY_RIGHT  */
     ATARIK_DOWN            , /*  KBD_JOY_DOWN   */
