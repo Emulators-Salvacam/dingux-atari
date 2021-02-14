@@ -1,0 +1,88 @@
+#
+# Atari800 port on PSP 
+#
+# Copyright (C) 2009 Ludovic Jacomme (ludovic.jacomme@gmail.com)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+TARGET = pspatari
+PSPSDK = $(shell psp-config --pspsdk-path)
+PSPBIN = $(shell psp-config --psp-prefix)/bin
+SDL_CONFIG = $(PSPBIN)/sdl-config
+OBJS =  \
+  antic.o atari.o atari_sdl.o binload.o \
+  cartridge.o cassette.o colours.o compfile.o cpu.o cycle_map.o \
+  devices.o gtia.o input.o log.o memory.o monitor.o  \
+  pbi.o pia.o pokey.o pokeysnd.o remez.o rtime.o screen.o sio.o \
+  statesav.o ui_basic.o ui.o util.o \
+  psp_main.o psp_kbd.o psp_danzeff.o psp_gu.o psp_sdl.o psp_font.o \
+  psp_fmgr.o psp_menu.o  psp_menu_kbd.o psp_battery.o psp_menu_set.o \
+  psp_menu_help.o psp_irkeyb.o \
+  miniunz.o ioapi.o unzip.o \
+  psp_irda.o \
+  psp_joy.o \
+  psp_menu_cheat.o \
+  psp_menu_list.o \
+  psp_menu_joy.o \
+  psp_editor.o
+
+DEFAULT_CFLAGS = $(shell $(SDL_CONFIG) --cflags)
+
+PSP_FW_VERSION=500
+PSPATARI_VERSION=1.3.0
+
+MORE_CFLAGS = -DHAVE_CONFIG_H -I. -O2 -D_REENTRANT  \
+ -funroll-loops -ffast-math -fomit-frame-pointer \
+ -fno-strength-reduce -finline-functions \
+ -fsingle-precision-constant \
+ -DNO_STDIO_REDIRECT \
+ -DPSPFW30X \
+ -DUSE_IRDA_JOY -DUSE_PSP_IRKEYB \
+ -DPSPATARI_VERSION=\"$(PSPATARI_VERSION)\"
+
+OPTIM_CFLAGS= -O2
+
+CFLAGS = $(DEFAULT_CFLAGS) $(MORE_CFLAGS)
+CXXFLAGS = $(DEFAULT_CFLAGS) $(MORE_CFLAGS) -fno-exceptions -fno-rtti
+
+LIBS += -lpspirkeyb -lSDL_image -lSDL -lpng -ljpeg -lpspaudio -lpspgu -lpsppower -lpsphprm -lz -lm -lstdc++
+
+BUILD_PRX=1
+
+EXTRA_TARGETS = EBOOT.PBP
+PSP_EBOOT_TITLE = PSPATARI-v$(PSPATARI_VERSION)
+PSP_EBOOT_ICON= pspatari.png
+PSP_EBOOT_PIC1 = pspatari-pic.png
+
+include $(PSPSDK)/lib/build.mak
+
+all: EBOOT.PBP
+
+.c.o:
+	$(CC) $(CFLAGS) $(OPTIM_CFLAGS) -c -o $@ $<
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(OPTIM_CFLAGS) -c -o $@ $<
+
+psp_gu.o : psp_gu.c
+	$(CC) -c $< $(CFLAGS) -O0
+
+install: all
+	@mkdir -p /media/usbdisk/psp/game5XX/pspatari/
+	cp EBOOT.PBP /media/usbdisk/psp/game5XX/pspatari/
+
+realclean:
+	/bin/rm -f $(OBJS) EBOOT.PBP PARAM.SFO
+
