@@ -87,7 +87,11 @@
 # endif
    "SELECT",
    "START",
+# if defined(BITTBOY_MODE) 
+   "RESET",
+# else
    "LTRIGGER",
+# endif
    "RTRIGGER",
    "JOY_UP",
    "JOY_RIGHT",
