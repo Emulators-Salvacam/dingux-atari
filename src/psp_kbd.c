@@ -87,11 +87,8 @@
 # endif
    "SELECT",
    "START",
-# if defined(BITTBOY_MODE) 
    "RESET",
-# else
    "LTRIGGER",
-# endif
    "RTRIGGER",
    "JOY_UP",
    "JOY_RIGHT",
@@ -917,6 +914,11 @@ atari_decode_key(int psp_b, int button_pressed)
       psp_init_keyboard();
     }
   } else {
+#ifndef MIYOO_MODE
+  if (psp_b == KBD_FIRE) {
+    kbd_home_button_released = !button_pressed;
+  } else {
+#endif
     if (psp_kbd_mapping[psp_b] >= 0) {
       wake = 1;
       if (button_pressed) {
@@ -950,6 +952,9 @@ atari_decode_key(int psp_b, int button_pressed)
         kbd_ltrigger_mapping_active = 0;
       }
     }
+#ifndef MIYOO_MODE
+  }
+#endif
   }
   return 0;
 }

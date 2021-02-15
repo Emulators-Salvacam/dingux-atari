@@ -114,16 +114,16 @@ danzeff_readInput(gp2xCtrlData* pspctrl)
     selected_x = x;
     selected_y = y;
   }
-  // #ifndef MIYOO_MODE
-  // //if they are changing shift then that makes it dirty too
-  // if ((!shifted && (pspctrl->Buttons & GP2X_CTRL_RTRIGGER)) || (shifted && !(pspctrl.Buttons & GP2X_CTRL_RTRIGGER)))
-  //   dirty = true;
-  // #endif
+  #ifndef MIYOO_MODE
+  //if they are changing shift then that makes it dirty too
+  if ((!shifted && (pspctrl->Buttons & GP2X_CTRL_RTRIGGER)) || (shifted && !(pspctrl.Buttons & GP2X_CTRL_RTRIGGER)))
+    dirty = true;
+  #endif
 
-  // //unsigned int pressed = 0; //character they have entered, 0 as that means 'nothing'
-  // #ifndef MIYOO_MODE
-  // shifted = (pspctrl->Buttons & GP2X_CTRL_RTRIGGER)?true:false;
-  // #endif
+  //unsigned int pressed = 0; //character they have entered, 0 as that means 'nothing'
+  #ifndef MIYOO_MODE
+  shifted = (pspctrl->Buttons & GP2X_CTRL_RTRIGGER)?true:false;
+  #endif
   
   if (!holding)
   {
@@ -142,7 +142,11 @@ danzeff_readInput(gp2xCtrlData* pspctrl)
       //Now grab the value out of the array
       pressed = modeChar[ (mode*2 + shifted) % MAX_VKEYBOARD][y][x][innerChoice];
     }
+    #ifdef MIYOO_MODE
+    else if (pspctrl->Buttons& GP2X_CTRL_FIRE) //toggle mode
+    #else
     else if (pspctrl->Buttons& GP2X_CTRL_LTRIGGER) //toggle mode
+    #endif
     {
       dirty = true;
       #ifdef MIYOO_MODE 

@@ -121,21 +121,24 @@ typedef struct gp2xCtrlData SceCtrlData;
 #define GP2X_Y               (57)
 #endif
 
-#ifdef BITTBOY_MODE
-#define GP2X_L               (97)
-#else
-#define GP2X_L               (15)
-#endif
+#ifdef MIYOO_MODE
+#define GP2X_START           (1)   // Start   28     
+#define GP2X_SELECT          (97)  // Select   1
+#define GP2X_FIRE            (28)  // Reset   97
 
-#define GP2X_R               (14)
+#else
 #define GP2X_START           (28)        
 #define GP2X_SELECT          ( 1)
+#define GP2X_FIRE            (-5)
+#endif
+
+#define GP2X_L               (15)
+#define GP2X_R               (14)
 
 #define GP2X_UPLEFT          (-1)
 #define GP2X_UPRIGHT         (-2)
 #define GP2X_DOWNLEFT        (-3)
 #define GP2X_DOWNRIGHT       (-4)
-#define GP2X_FIRE            (-5)
 #define GP2X_VOLUP           (-6)
 #define GP2X_VOLDOWN         (-7)
 
